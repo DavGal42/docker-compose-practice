@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+
+  frontend:
+    build: ../frontend
+    ports:
+      - 3000:80
+    
+  backend:
+    build: .
+    ports:
+      - 7000:7000
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=root
+      - DB_DATABASE=devops_lessons
+      - PORT=7000
+      - HOST=localhost
+      - APP_NAME=Lessons
+      - APP_DESCRIPTION=Devops lessons REST API
+      - NODE_ENV=local
+
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=devops_lessons
+
+    ports:  
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
